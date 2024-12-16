@@ -6,11 +6,12 @@ A simple plugin addon for <a target="_blank" href="https://poggit.pmmp.io/p/Rank
 
 - Player faction name `{fac_name}`
 - Player faction power `{fac_power}`
+- Player faction mord `{fac_motd}`
 
 ## How to use this plugin
 
 - Open plugin_data /RankSystem/resources
-- Add `{fac_name}` and `{fac_power}` in format config.yml
+- Add `{fac_name}` and `{fac_power}` or `{fac_motd}` in format config.yml
 - Restart your server
 
 ## Example
@@ -19,7 +20,7 @@ A simple plugin addon for <a target="_blank" href="https://poggit.pmmp.io/p/Rank
 #Configure users's nametag
 nametag:
   enabled: true
-  format: "{nametag_ranks_prefix}{nametag_name-color}{name}§e[§3{fac_name}§f:§c{fac_power}§e]§r"
+  format: "{nametag_ranks_prefix}{nametag_name-color}{name}§e[§3{fac_motd}§f:§c{fac_power}§e]§r"
 
 #Configure users's chat
 chat:
