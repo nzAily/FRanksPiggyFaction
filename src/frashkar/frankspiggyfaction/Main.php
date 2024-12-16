@@ -9,7 +9,7 @@
 * |_|    |_|  \_\__,_|___/_| |_|_|\_\__,_|_|         | .__/|_| |_| |_|
 *                                                    | |              
 *                                                    |_|              
-* The author of this plugin is FRashkar-pm
+* The author of this plugin is FRashkar-pm
 * https://github.com/FRashkar-pm
 * Discord: FireRashkar#1519
 */
@@ -39,7 +39,7 @@ class Main extends PluginBase
 
     private static function getRankSystem() : ?RankSystem
     {
-        if (Server::getInstance()->getPluginManager()->getPLugin("RankSystem") !== null){
+        if (Server::getInstance()->getPluginManager()->getPlugin("RankSystem") !== null){
             return RankSystem::getInstance();
         }
         return null;
@@ -47,7 +47,7 @@ class Main extends PluginBase
 
     private static function getPiggyFaction() : ?PiggyFactions
     {
-        if (Server::getInstance()->getPluginManager()->getPLugin("PiggyFactions") !== null){
+        if (Server::getInstance()->getPluginManager()->getPlugin("PiggyFactions") !== null){
             return PiggyFactions::getInstance();
         }
         return null;
@@ -59,11 +59,9 @@ class Main extends PluginBase
         if ($piggyFactions === null) return "";
         $member = $piggyFactions->getPlayerManager()->getPlayer($player);
         if ($member === null) return "";
-        if ($member !== null){
-            $faction = $member->getFaction();
-            if ($faction === null) return "";
-            return $faction->getName();
-        }
+        $faction = $member->getFaction();
+        if ($faction === null) return "";
+        return $faction->getName();
     }
 
     private static function getPlayerFactionPower(Player $player) : string
@@ -72,10 +70,19 @@ class Main extends PluginBase
         if ($piggyFactions === null) return "";
         $member = $piggyFactions->getPlayerManager()->getPlayer($player);
         if ($member === null) return "";
-        if ($member !== null){
-            $power = round($member->getPower(), 1);
-            return (string) $power;
-        }
+        $power = round($member->getPower(), 1);
+        return (string) $power;
+    }
+
+    private static function getPlayerFactionMotd(Player $player) : string
+    {
+        $piggyFactions = self::getPiggyFaction();
+        if ($piggyFactions === null) return "";
+        $member = $piggyFactions->getPlayerManager()->getPlayer($player);
+        if ($member === null) return "";
+        $faction = $member->getFaction();
+        if ($faction === null) return "";
+        return $faction->getMotd() ?? ""; // Assumes getMotd() exists
     }
 
     private function setPiggyFactionSupport() : void 
@@ -83,19 +90,32 @@ class Main extends PluginBase
         $rankSystem = self::getRankSystem();
         if ($rankSystem === null) return;
         $tagManager = $rankSystem->getTagManager();
+
         $tagManager->registerTag(new Tag("fac_name", static function(Session $user) : string {
             $player = $user->getPlayer();
             if ($player === null) return "";
             if ($player instanceof Player){
                 return self::getPlayerFaction($player);
             }
+            return "";
         }));
+
         $tagManager->registerTag(new Tag("fac_power", static function(Session $user) : string {
             $player = $user->getPlayer();
             if ($player === null) return "";
             if ($player instanceof Player){
                 return self::getPlayerFactionPower($player);
             }
+            return "";
+        }));
+
+        $tagManager->registerTag(new Tag("fac_motd", static function(Session $user) : string {
+            $player = $user->getPlayer();
+            if ($player === null) return "";
+            if ($player instanceof Player){
+                return self::getPlayerFactionMotd($player);
+            }
+            return "";
         }));
     }
 }
