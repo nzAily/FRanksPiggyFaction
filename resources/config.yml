@@ -2,3 +2,4 @@
 # Tags can be used both in nametag and chat. (These are not related to ScoreHud)
 # {fac_name} - Player faction name
 # {fac_power} - Player faction power
+# {fac_motd} - Player faction motd
